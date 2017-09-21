@@ -58,14 +58,13 @@ action :install do
   end
 
   systemd_service 'node_exporter' do
-    description 'Systemd unit for Prometheus Node Exporter'
+    unit_description 'Systemd unit for Prometheus Node Exporter'
     after %w(network.target remote-fs.target apiserver.service)
     install do
       wanted_by 'multi-user.target'
     end
     service do
       type 'simple'
-      user 'root'
       exec_start "/usr/local/sbin/node_exporter #{options}"
       working_directory '/'
       restart 'on-failure'
