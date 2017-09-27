@@ -29,12 +29,12 @@ action :install do
     mode '0644'
     source node['prometheus_exporters']['node']['url']
     checksum node['prometheus_exporters']['node']['checksum']
+    notifies :run, 'execute[untar node_exporter]', :immediately
   end
 
-  bash 'untar node_exporter' do
-    code "tar -xzf #{Chef::Config[:file_cache_path]}/node_exporter.tar.gz -C /opt"
+  execute 'untar node_exporter' do
+    command "tar -xzf #{Chef::Config[:file_cache_path]}/node_exporter.tar.gz -C /opt"
     action :nothing
-    subscribes :run, 'remote_file[node_exporter]'
   end
 
   link '/usr/local/sbin/node_exporter' do
