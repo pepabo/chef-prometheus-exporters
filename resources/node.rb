@@ -73,6 +73,7 @@ action :install do
 
     only_if { node['platform_version'].to_i >= 16 }
 
+    verify false
     notifies :restart, 'service[node_exporter]'
   end
 
