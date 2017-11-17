@@ -71,7 +71,7 @@ action :install do
       restart_sec '30s'
     end
 
-    only_if { node['platform_version'].to_i >= 16 }
+    only_if { (platform?("ubuntu") && node['platform_version'].to_i >= 16) || (platform?("centos") && node['platform_version'].to_i >= 7)}
 
     verify false
     notifies :restart, 'service[node_exporter]'
@@ -90,7 +90,7 @@ action :install do
     only_if { node['platform_version'].to_i < 16 }
 
     notifies :restart, 'service[node_exporter]'
-  end
+  end if platform?("ubuntu")
 
   directory 'collector_textfile_directory' do
     path collector_textfile_directory
